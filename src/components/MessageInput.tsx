@@ -1,17 +1,20 @@
-import { Send } from 'lucide-react';
+import { ArrowUp, Paperclip } from 'lucide-react';
 
 const MessageInput = () => (
-  <form className="relative">
-    <input
-      type="text"
-      placeholder="Type your message..."
-      className="w-full bg-gray-700 text-white rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  <form className="relative flex items-center bg-gray-700 rounded-lg p-2">
+    <button className="p-2 text-gray-400 hover:text-white transition-colors duration-200">
+      <Paperclip size={20} />
+    </button>
+    <textarea
+      placeholder="Type a message and press Enter to send ..."
+      className="flex-grow bg-transparent text-white focus:outline-none resize-none overflow-hidden h-10 py-2 px-2"
+      rows={1}
     />
     <button
       type="submit"
-      className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-full"
+      className="ml-2 p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-colors duration-200"
     >
-      <Send />
+      <ArrowUp size={20} />
     </button>
   </form>
 );

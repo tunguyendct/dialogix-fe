@@ -1,12 +1,11 @@
 import MessageInput from './MessageInput';
-import MessageList from './MessageList';
 
 const ChatArea = () => (
-  <div className="flex-grow flex flex-col">
-    <div className="flex-grow p-6 overflow-y-auto">
-      <MessageList />
+  <div className="flex-grow flex flex-col items-center justify-between p-6">
+    <div className="flex-grow flex items-center justify-center text-gray-600 text-4xl font-bold">
+      LM STUDIO
     </div>
-    <div className="p-6">
+    <div className="w-full max-w-3xl">
       <MessageInput />
     </div>
   </div>
