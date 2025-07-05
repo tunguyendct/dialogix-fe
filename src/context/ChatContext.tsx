@@ -1,22 +1,10 @@
-import React, { createContext } from 'react';
-import type { ChatSession, ChatState, Message } from '../types';
-
-// Action types
-export type ChatAction =
-  | { type: 'SET_CURRENT_SESSION'; payload: ChatSession }
-  | { type: 'ADD_MESSAGE'; payload: Message }
-  | {
-      type: 'UPDATE_MESSAGE';
-      payload: { id: string; content: string; isLoading?: boolean };
-    }
-  | { type: 'CREATE_NEW_SESSION' }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'ADD_SESSION'; payload: ChatSession }
-  | { type: 'UPDATE_SESSION_TITLE'; payload: { id: string; title: string } };
+import React, { useReducer } from 'react';
+import type { ReactNode } from 'react';
+import type { ChatSession, ChatState } from '../types';
+import { type ChatAction, ChatContext } from './ChatContextDefinition';
 
 // Initial state
-export const initialState: ChatState = {
+const initialState: ChatState = {
   currentSession: null,
   sessions: [],
   isLoading: false,
@@ -24,10 +12,7 @@ export const initialState: ChatState = {
 };
 
 // Reducer function
-export const chatReducer = (
-  state: ChatState,
-  action: ChatAction
-): ChatState => {
+const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
   switch (action.type) {
     case 'SET_CURRENT_SESSION':
       return {
@@ -135,7 +120,17 @@ export const chatReducer = (
 };
 
 // Context
-export const ChatContext = createContext<{
-  state: ChatState;
-  dispatch: React.Dispatch<ChatAction>;
-} | null>(null);
+// Imported from ChatContextDefinition.tsx
+
+// Provider component
+export const ChatProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [state, dispatch] = useReducer(chatReducer, initialState);
+
+  return (
+    <ChatContext.Provider value={{ state, dispatch }}>
+      {children}
+    </ChatContext.Provider>
+  );
+};

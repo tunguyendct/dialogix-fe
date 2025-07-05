@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ChatContext } from '../context/ChatContext';
+import { ChatContext } from '../context/ChatContextDefinition';
 
 // Custom hook to use the chat context
 export const useChat = () => {
