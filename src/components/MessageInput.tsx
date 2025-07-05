@@ -1,20 +1,20 @@
 import { useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { ArrowUp, Paperclip } from 'lucide-react';
-import { apiClient } from '../api/client';
+import { useSendMessage } from '../hooks/useApi';
 import { useChat } from '../hooks/useChat';
 import { createAssistantMessage, createUserMessage } from '../utils/chat';
 
 const MessageInput = () => {
   const [message, setMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { state, dispatch } = useChat();
+  const sendMessageMutation = useSendMessage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!message.trim() || isSubmitting) return;
+    if (!message.trim() || sendMessageMutation.isPending) return;
 
     const userMessage = createUserMessage(message.trim());
 
@@ -23,49 +23,41 @@ const MessageInput = () => {
 
     // Clear input
     setMessage('');
-    setIsSubmitting(true);
 
+    // Create loading assistant message
+    const loadingMessage = createAssistantMessage('', true);
+    dispatch({ type: 'ADD_MESSAGE', payload: loadingMessage });
+
+    // Send message using React Query
     try {
-      // Create loading assistant message
-      const loadingMessage = createAssistantMessage('', true);
-      dispatch({ type: 'ADD_MESSAGE', payload: loadingMessage });
-
-      // Send message to API
-      const response = await apiClient.sendMessage({
+      const response = await sendMessageMutation.mutateAsync({
         message: userMessage.content,
         conversationId: state.currentSession?.id,
       });
 
-      if (response.success && response.data) {
-        // Update the loading message with the response
-        dispatch({
-          type: 'UPDATE_MESSAGE',
-          payload: {
-            id: loadingMessage.id,
-            content: response.data.message,
-            isLoading: false,
-          },
-        });
-      } else {
-        // Handle error
-        dispatch({
-          type: 'UPDATE_MESSAGE',
-          payload: {
-            id: loadingMessage.id,
-            content: 'Sorry, I encountered an error. Please try again.',
-            isLoading: false,
-          },
-        });
-        dispatch({
-          type: 'SET_ERROR',
-          payload: response.error || 'Failed to send message',
-        });
-      }
+      // Update the loading message with the response
+      dispatch({
+        type: 'UPDATE_MESSAGE',
+        payload: {
+          id: loadingMessage.id,
+          content: response.message,
+          isLoading: false,
+        },
+      });
     } catch (error) {
-      console.error('Error sending message:', error);
-      dispatch({ type: 'SET_ERROR', payload: 'Failed to send message' });
-    } finally {
-      setIsSubmitting(false);
+      // Handle error
+      dispatch({
+        type: 'UPDATE_MESSAGE',
+        payload: {
+          id: loadingMessage.id,
+          content: 'Sorry, I encountered an error. Please try again.',
+          isLoading: false,
+        },
+      });
+
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to send message';
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
     }
   };
 
@@ -105,11 +97,11 @@ const MessageInput = () => {
         placeholder="Type a message and press Enter to send ..."
         className="flex-grow bg-transparent text-white focus:outline-none resize-none overflow-hidden min-h-[2.5rem] max-h-32 py-2 px-2"
         rows={1}
-        disabled={isSubmitting}
+        disabled={sendMessageMutation.isPending}
       />
       <button
         type="submit"
-        disabled={!message.trim() || isSubmitting}
+        disabled={!message.trim() || sendMessageMutation.isPending}
         className="ml-2 p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-full transition-colors duration-200"
       >
         <ArrowUp size={20} />
