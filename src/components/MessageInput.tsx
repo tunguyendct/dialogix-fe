@@ -81,11 +81,11 @@ const MessageInput = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative flex items-center bg-gray-700 rounded-lg p-2"
+      className="relative flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-2 border border-gray-300 dark:border-gray-600"
     >
       <button
         type="button"
-        className="p-2 text-gray-400 hover:text-white transition-colors duration-200"
+        className="p-2 text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors duration-200"
       >
         <Paperclip size={20} />
       </button>
@@ -95,14 +95,14 @@ const MessageInput = () => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder="Type a message and press Enter to send ..."
-        className="flex-grow bg-transparent text-white focus:outline-none resize-none overflow-hidden min-h-[2.5rem] max-h-32 py-2 px-2"
+        className="flex-grow bg-transparent text-gray-900 dark:text-white focus:outline-none resize-none overflow-hidden min-h-[2.5rem] max-h-32 py-2 px-2 placeholder-gray-500 dark:placeholder-gray-400"
         rows={1}
         disabled={sendMessageMutation.isPending}
       />
       <button
         type="submit"
         disabled={!message.trim() || sendMessageMutation.isPending}
-        className="ml-2 p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-full transition-colors duration-200"
+        className="ml-2 p-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-full transition-colors duration-200"
       >
         <ArrowUp size={20} />
       </button>

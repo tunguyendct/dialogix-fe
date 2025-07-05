@@ -14,9 +14,9 @@ const ChatArea = () => {
   }, [state.currentSession, dispatch]);
 
   return (
-    <div className="flex-grow flex flex-col bg-white text-gray-900">
+    <div className="flex-grow flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       <MessageList />
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800">
         <div className="max-w-4xl mx-auto">
           <MessageInput />
         </div>

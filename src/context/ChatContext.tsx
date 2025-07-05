@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import type { ReactNode } from 'react';
 import type { ChatSession, ChatState } from '../types';
+import { generateChatTitle } from '../utils/chat';
 import { type ChatAction, ChatContext } from './ChatContextDefinition';
 
 // Initial state
@@ -27,6 +28,12 @@ const chatReducer = (state: ChatState, action: ChatAction): ChatState => {
         ...state.currentSession,
         messages: [...state.currentSession.messages, action.payload],
         updatedAt: new Date(),
+        // Auto-generate title from first user message
+        title:
+          state.currentSession.messages.length === 0 &&
+          action.payload.role === 'user'
+            ? generateChatTitle(action.payload.content)
+            : state.currentSession.title,
       };
 
       return {
