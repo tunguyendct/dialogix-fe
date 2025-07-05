@@ -1,20 +1,25 @@
 import ChatArea from './components/ChatArea';
+import ErrorDisplay from './components/ErrorDisplay';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import IconSidebar from './components/IconSidebar';
 import Sidebar from './components/Sidebar';
+import { ChatProvider } from './context/ChatContext';
 
 function App() {
   return (
-    <div className="flex h-screen bg-gray-800 text-white">
-      <IconSidebar />
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Header />
-        <ChatArea />
-        <Footer />
+    <ChatProvider>
+      <div className="flex h-screen bg-gray-800 text-white">
+        <IconSidebar />
+        <Sidebar />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          <ChatArea />
+          <Footer />
+        </div>
+        <ErrorDisplay />
       </div>
-    </div>
+    </ChatProvider>
   );
 }
 
