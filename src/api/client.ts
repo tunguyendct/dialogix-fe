@@ -9,6 +9,9 @@ import type {
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
+// API version
+const API_VERSION = import.meta.env.VITE_API_VERSION || 'api/v1';
+
 class ApiClient {
   private baseURL: string;
 
@@ -21,7 +24,7 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     try {
-      const url = `${this.baseURL}${endpoint}`;
+      const url = `${this.baseURL}/${API_VERSION}${endpoint}`;
       const response = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +55,7 @@ class ApiClient {
   async sendMessage(
     request: SendMessageRequest
   ): Promise<ApiResponse<ChatCompletionResponse>> {
-    return this.request<ChatCompletionResponse>('/api/chat/completions', {
+    return this.request<ChatCompletionResponse>('/chat/completions', {
       method: 'POST',
       body: JSON.stringify(request),
     });
@@ -63,20 +66,20 @@ class ApiClient {
     conversationId: string
   ): Promise<ApiResponse<{ messages: Message[] }>> {
     return this.request<{ messages: Message[] }>(
-      `/api/chat/history/${conversationId}`
+      `/chat/history/${conversationId}`
     );
   }
 
   // Create a new conversation
   async createConversation(): Promise<ApiResponse<{ conversationId: string }>> {
-    return this.request('/api/chat/conversations', {
+    return this.request('/chat/conversations', {
       method: 'POST',
     });
   }
 
   // Health check
   async healthCheck(): Promise<ApiResponse<{ status: string }>> {
-    return this.request('/api/health');
+    return this.request('/health');
   }
 }
 

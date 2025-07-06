@@ -9,7 +9,7 @@ This document describes the expected API endpoints that your Python backend shou
 ## API Endpoints
 
 ### 1. Health Check
-**GET** `/api/health`
+**GET** `/health`
 
 **Response:**
 ```json
@@ -21,7 +21,7 @@ This document describes the expected API endpoints that your Python backend shou
 ```
 
 ### 2. Send Message (Chat Completion)
-**POST** `/api/chat/completions`
+**POST** `/chat/completions`
 
 **Request Body:**
 ```json
@@ -41,7 +41,7 @@ This document describes the expected API endpoints that your Python backend shou
 ```
 
 ### 3. Create Conversation (Optional)
-**POST** `/api/chat/conversations`
+**POST** `/chat/conversations`
 
 **Response:**
 ```json
@@ -51,7 +51,7 @@ This document describes the expected API endpoints that your Python backend shou
 ```
 
 ### 4. Get Chat History (Optional)
-**GET** `/api/chat/history/{conversationId}`
+**GET** `/chat/history/{conversationId}`
 
 **Response:**
 ```json
@@ -129,7 +129,7 @@ class MessageResponse(BaseModel):
     messageId: str
     conversationId: str = None
 
-@app.get("/api/health")
+@app.get("/api/v1/health")
 async def health_check():
     return {
         "status": "ok",
@@ -137,7 +137,7 @@ async def health_check():
         "version": "1.0.0"
     }
 
-@app.post("/api/chat/completions", response_model=MessageResponse)
+@app.post("/api/v1/chat/completions", response_model=MessageResponse)
 async def chat_completion(request: MessageRequest):
     # Here you would integrate with your AI model
     # This is just a simple echo response
@@ -157,10 +157,10 @@ You can test your backend API using curl:
 
 ```bash
 # Health check
-curl http://localhost:8000/api/health
+curl http://localhost:8000/api/v1/health
 
 # Send a message
-curl -X POST http://localhost:8000/api/chat/completions \
+curl -X POST http://localhost:8000/api/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"message": "Hello, how are you?"}'
 ```
