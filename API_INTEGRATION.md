@@ -27,7 +27,7 @@ This document describes the expected API endpoints that your Python backend shou
 ```json
 {
   "message": "Hello, how are you?",
-  "conversationId": "session-1704459600000" // optional
+  "conversation_id": "session-1704459600000" // optional
 }
 ```
 
@@ -36,7 +36,7 @@ This document describes the expected API endpoints that your Python backend shou
 {
   "message": "Hello! I'm doing well, thank you for asking. How can I help you today?",
   "messageId": "msg-1704459601000",
-  "conversationId": "session-1704459600000"
+  "conversation_id": "session-1704459600000"
 }
 ```
 
@@ -46,7 +46,7 @@ This document describes the expected API endpoints that your Python backend shou
 **Response:**
 ```json
 {
-  "conversationId": "session-1704459600000"
+  "conversation_id": "session-1704459600000"
 }
 ```
 
@@ -122,12 +122,12 @@ app = FastAPI()
 
 class MessageRequest(BaseModel):
     message: str
-    conversationId: str = None
+    conversation_id: str = None
 
 class MessageResponse(BaseModel):
     message: str
     messageId: str
-    conversationId: str = None
+    conversation_id: str = None
 
 @app.get("/api/v1/health")
 async def health_check():
@@ -147,7 +147,7 @@ async def chat_completion(request: MessageRequest):
     return MessageResponse(
         message=response_message,
         messageId=f"msg-{int(datetime.now().timestamp() * 1000)}",
-        conversationId=request.conversationId
+        conversation_id=request.conversation_id
     )
 ```
 
