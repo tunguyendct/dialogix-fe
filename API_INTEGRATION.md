@@ -27,7 +27,7 @@ This document describes the expected API endpoints that your Python backend shou
 ```json
 {
   "message": "Hello, how are you?",
-  "conversationId": "session-1704459600000" // optional
+  "conversation_id": "session-1704459600000" // optional
 }
 ```
 
@@ -36,7 +36,7 @@ This document describes the expected API endpoints that your Python backend shou
 {
   "message": "Hello! I'm doing well, thank you for asking. How can I help you today?",
   "messageId": "msg-1704459601000",
-  "conversationId": "session-1704459600000"
+  "conversation_id": "session-1704459600000"
 }
 ```
 

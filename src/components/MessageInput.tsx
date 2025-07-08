@@ -32,7 +32,7 @@ const MessageInput = () => {
     try {
       const response = await sendMessageMutation.mutateAsync({
         message: userMessage.content,
-        conversationId: state.currentSession?.id,
+        conversation_id: state.currentSession?.id,
       });
 
       // Update the loading message with the response

@@ -40,5 +40,5 @@ export interface ChatState {
 // API request types
 export interface SendMessageRequest {
   message: string;
-  conversationId?: string;
+  conversation_id?: string;
 }
