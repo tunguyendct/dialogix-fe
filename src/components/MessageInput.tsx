@@ -14,7 +14,12 @@ const MessageInput = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!message.trim() || sendMessageMutation.isPending) return;
+    if (
+      !message.trim() ||
+      sendMessageMutation.isPending ||
+      !state.currentSession
+    )
+      return;
 
     const userMessage = createUserMessage(message.trim());
 
@@ -32,7 +37,8 @@ const MessageInput = () => {
     try {
       const response = await sendMessageMutation.mutateAsync({
         message: userMessage.content,
-        conversation_id: state.currentSession?.id,
+        conversation_id: state.currentSession.id,
+        timestamp: new Date(),
       });
 
       // Update the loading message with the response

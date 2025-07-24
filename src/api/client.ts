@@ -55,7 +55,7 @@ class ApiClient {
   async sendMessage(
     request: SendMessageRequest
   ): Promise<ApiResponse<ChatCompletionResponse>> {
-    return this.request<ChatCompletionResponse>('/chat/completions', {
+    return this.request<ChatCompletionResponse>('/conversation/message', {
       method: 'POST',
       body: JSON.stringify(request),
     });

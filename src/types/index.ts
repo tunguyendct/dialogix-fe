@@ -26,7 +26,7 @@ export interface ApiResponse<T> {
 export interface ChatCompletionResponse {
   message: string;
   messageId: string;
-  conversationId?: string;
+  conversationId: string;
 }
 
 // UI state types
@@ -40,5 +40,6 @@ export interface ChatState {
 // API request types
 export interface SendMessageRequest {
   message: string;
-  conversation_id?: string;
+  conversation_id: string;
+  timestamp: Date;
 }
