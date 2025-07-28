@@ -111,7 +111,9 @@ const MessageBubble = ({ message }: { message: Message }) => {
 
   return (
     <div
-      className={`flex gap-3 p-4 ${isUser ? 'bg-transparent' : 'bg-gray-50 dark:bg-gray-800/50'}`}
+      className={`flex gap-3 p-4 ${
+        isUser ? 'bg-transparent' : 'bg-gray-50 dark:bg-gray-800/50 rounded-lg'
+      }`}
     >
       {/* Avatar */}
       <div
@@ -158,7 +160,6 @@ const MessageList = () => {
   const { state } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new messages are added
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -167,7 +168,7 @@ const MessageList = () => {
 
   if (!state.currentSession || state.currentSession.messages.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center p-8 bg-white">
         <div className="text-center max-w-2xl">
           <Bot
             size={64}
@@ -204,7 +205,7 @@ const MessageList = () => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto bg-white">
       <div className="max-w-4xl mx-auto">
         {state.currentSession.messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
