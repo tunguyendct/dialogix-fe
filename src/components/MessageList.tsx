@@ -1,110 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { useState } from 'react';
-import { Bot, Check, Copy, Loader2, User } from 'lucide-react';
+import { Bot, Loader2, User } from 'lucide-react';
 import { useChat } from '../hooks/useChat';
 import type { Message } from '../types';
 import { formatMessageTime } from '../utils/chat';
-
-const CodeBlock = ({ code, language }: { code: string; language?: string }) => {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy code:', err);
-    }
-  };
-
-  return (
-    <div className="relative bg-gray-900 rounded-lg my-2 overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 text-gray-300 text-sm">
-        <span>{language || 'code'}</span>
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-1 px-2 py-1 rounded hover:bg-gray-700 transition-colors"
-        >
-          {copied ? (
-            <>
-              <Check size={14} />
-              <span>Copied!</span>
-            </>
-          ) : (
-            <>
-              <Copy size={14} />
-              <span>Copy</span>
-            </>
-          )}
-        </button>
-      </div>
-      <pre className="p-4 text-gray-100 text-sm overflow-x-auto">
-        <code>{code}</code>
-      </pre>
-    </div>
-  );
-};
-
-const MessageContent = ({ content }: { content: string }) => {
-  // Simple regex to detect code blocks (```language\ncode\n```)
-  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-  const parts = [];
-  let lastIndex = 0;
-  let match;
-
-  while ((match = codeBlockRegex.exec(content)) !== null) {
-    // Add text before code block
-    if (match.index > lastIndex) {
-      parts.push({
-        type: 'text',
-        content: content.slice(lastIndex, match.index),
-      });
-    }
-
-    // Add code block
-    parts.push({
-      type: 'code',
-      language: match[1],
-      content: match[2].trim(),
-    });
-
-    lastIndex = match.index + match[0].length;
-  }
-
-  // Add remaining text
-  if (lastIndex < content.length) {
-    parts.push({
-      type: 'text',
-      content: content.slice(lastIndex),
-    });
-  }
-
-  if (parts.length === 0) {
-    parts.push({ type: 'text', content });
-  }
-
-  return (
-    <div>
-      {parts.map((part, index) => {
-        if (part.type === 'code') {
-          return (
-            <CodeBlock
-              key={index}
-              code={part.content}
-              language={part.language}
-            />
-          );
-        }
-        return (
-          <div key={index} className="whitespace-pre-wrap">
-            {part.content}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+import { MarkdownContent } from '../utils/markdown';
 
 const MessageBubble = ({ message }: { message: Message }) => {
   const isUser = message.role === 'user';
@@ -148,7 +47,7 @@ const MessageBubble = ({ message }: { message: Message }) => {
               <span>Thinking...</span>
             </div>
           ) : (
-            <MessageContent content={message.content} />
+            <MarkdownContent content={message.content} />
           )}
         </div>
       </div>
